@@ -124,7 +124,7 @@
                     <td>{{ set_detail.exercise.name }}</td>
                     <td>{{ set_detail.set_number }}</td>
                     <td>{% if set_detail.weight > 0 %}{{ set_detail.weight }}{% endif %}</td>
-                    <td class="border-b-[2px] border-b-slate-400">{% if set_detail.reps > 0 %}{{ set_detail.reps }}{% endif %}</td>
+                    <td>{% if set_detail.reps > 0 %}{{ set_detail.reps }}{% endif %}</td>
                 </tr>
                 {% empty %}
                 <tr>
