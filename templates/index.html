@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomePage</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts Section -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Bebas+Neue&family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/6d2c452e18.js" crossorigin="anonymous"></script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+                html {
+                scroll-behavior:smooth;
+                }
+    
+                .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: rgb(46, 46, 46,0.5);
+                min-width: 160px;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                z-index: 1;
+            }
+            .dropdown-content a {
+                color: #FFFFFF;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+            .dropdown-content a:hover {
+                background-color: #555555;
+                color: aqua;
+    
+            }
+            .dropdown:hover .dropdown-content {
+                display: block;
+            }
+            .dropbtn {
+                background-color: transparent;
+                color: white;
+                padding: 16px;
+                font-size: 16px;
+                border: none;
+                cursor: pointer;
+            }
+        }
+    </style>
+
+</head>
+<body class="ml-0 mr-0 bg-[#0C0C0C]" style="font-family:Poppins, sans-serif;">
+    <div class="relative">
+    <img  class="bg-cover overflow-hidden " id="Home" src="{% static 'assets/Banner-image.jpg' %}" alt="">
+    <!-- NAVBAR SECTION -->
+     <nav class="z-50 min-h-[47px] py-3 w-full bg-[rgb(0,0,0,0.3)] px-[150px] flex justify-between gap-3 fixed top-0 backdrop-blur-sm">
+        <!-- Logo Div -->
+         <div class="text-[28px] font-bold italic text-[#EA906C] flex justify-center items-center gap-[15px] ">
+            <img src="{% static 'assets/barbell-logo.png' %}" alt="" class="w-[45px]">
+            <p style="font-family:Assistant, sans-serif;">FitBUDDY</p>
+         </div>
+         <!-- Our Details Div -->
+         <div class=" flex justify-center items-center gap-[50px] font-semibold text-[17px] text-white">
+            <p class="hover:text-[#FFF455] cursor-pointer"><a href="#Home">Home</a></p>
+            <p class="hover:text-[#FFF455] cursor-pointer"><a href="#About">About us</a></p>
+            <p class="hover:text-[#FFF455] cursor-pointer"><a href="#Contact">Contact us</a></p>
+            <p class="hover:text-[#FFF455] cursor-pointer" target="_blank"><a href="https://shop.trustified.co.in/">Shop Now</a></p>
+         </div>
+         
+         <!-- User Div -->
+<!--          <div class="text-[15px] text-white font-bold flex justify-center items-center gap-[20px]" style="font-family: Ubuntu,sans-serif;">
+            {% if user.is_authenticated %}
+            <p class="hover:text-[#FF9898]">{{ user.first_name }}</p>
+            <img class="rounded-[50%] w-[38px] hover:cursor-pointer" src="{{ profile_pic_url }}" alt="">
+            <img src="{% static 'assets/Cart.png' %}" class="w-[38px] hover:cursor-pointer" alt="">
+            {% else %}
+            <p class="hover:text-[#FF9898]"><a href='/login'>Log In</a></p>
+            <img class="w-[38px] hover:cursor-pointer" src="{% static 'assets/user_logo.png' %}" alt="">
+            <img src="{% static 'assets/Cart.png' %}" class="w-[38px] hover:cursor-pointer" alt="">
+            {% endif %}
+         </div> -->
+         
+         <!-- User Div 2-->
+         <div class="text-[15px] text-white font-bold flex justify-center items-center gap-[5px]" style="font-family: Ubuntu,sans-serif;">
+            {% if user.is_authenticated %}
+            <div class="dropdown">
+                <button class="dropbtn">{{ user.first_name }} 🔽</button>
+                <div class="dropdown-content">
+                    <a href="/dashboard">Dashboard</a>
+                    <a href="/logout">Log Out</a>
+                    <a href="/tracker">Start Logging Workout</a>
+                </div>
+            </div>
+            <img class="rounded-[50%] w-[39px] hover:cursor-pointer" src="{{ profile_pic_url }}" alt="">
+            <img src="{% static 'assets/Cart.png' %}" class="w-[38px] hover:cursor-pointer" alt="">
+            {% else %}
+            <p class="hover:text-[#FF9898]"><a href='/login'>Log in</a></p>
+            <img class="w-[38px] hover:cursor-pointer mr-2" src="{% static 'assets/user_logo.png' %}" alt="">
+            <a href="https://shop.trustified.co.in/" target="_blank"><img src="{% static 'assets/Cart.png' %}" class="w-[38px] hover:cursor-pointer" alt=""></a>
+            {% endif %}
+         </div>
+     </nav>
+    </div>
+
+    <!-- TAGLINES AND READY TO WORK BUTTON -->
+    <div class="absolute top-[26%] text-white px-[150px]">
+        <!-- TAGLINES HERE -->
+        <div>
+         <p class="font-bold text-white text-[62px]  pr-[390px] leading-[80px] tracking-wide" style="font-family:Bebas Neue, sans-serif;">
+           If you <span class="text-[#BF3131]">don’t find the time</span>, if you don’t do the work, you <span class="text-[#BF3131]">don’t get the results</span>.
+            <br> <span class=" text-[#872341] arnold">– Arnold Schwarzenegger</span>
+         </p>
+        </div>
+        <!-- WORKOUT JOURNAL BUTTON -->
+        <div class="text-[#FCAEAE] text-[23px] font-semibold pr-[270px] mt-[30px]">
+            <p class="text-justify tracking-wide">Log your <span class="text-[#F79327]">Workouts</span> and keep track of your progress. Our expert Algorithm will keep track of youe health and well being and will also give you a <span class="text-[#F79327]">Daily Report</span> on the basis of your entry.</p>
+            <br>
+            <button class="border-2 bg-[#620f20] text-white p-[12px] px-[15px] hover:bg-[#000] hover:text-[#fff] hover:cursor-pointer text-[18px] hover:font-extrabold tracking-wide "
+                style="box-shadow:3px 3px 0px #fff;transition: box-shadow 0.3s ease;"
+                onmouseover="this.style.boxShadow='3px 3px 0px #973131'"
+                onmouseout="this.style.boxShadow='3px 3px 0px #5C2FC2'"><a href="/tracker">Start Logging a Workout</a>
+            </button>
+        </div>
+    </div>
+
+<!-- Remaining Code -->
+    <div class="bg-[#0C0C0C] h-[60px] text-[38px] text-center font-semibold text-[#ffff] py-[7px] tracking-wider my-[60px] mt-[100px]"
+    style="font-family: Bebas Neue, sans-serif;">
+    <p>KNOW YOUR MUSCLES</p>
+    </div>
+    <!-- Muscle Catagory Details -->
+     <div class="mx-[15%] text-[17px] text-slate-300 text-justify flex justify-center items-center gap-[15px] flex-col mb-[80px]">
+        <p>Muscles are a vital component of our bodies, playing a crucial role in almost every movement we make. They support our skeletal structure, enable mobility, and contribute to overall strength and stability. Beyond their functional roles, muscles are key to maintaining a healthy metabolism, as they burn more calories at rest compared to fat. Muscle building, therefore, is not just about aesthetics or increasing physical strength; it's also about enhancing overall health and well-being. 
+        </p>
+        <p>Regular strength training and muscle-building exercises can help prevent chronic diseases, improve posture, reduce the risk of injuries, and boost mental health by releasing endorphins. By focusing on muscle health and development, individuals can achieve a balanced, strong, and resilient body. To delve deeper into the science behind muscles and effective muscle-building strategies, explore our detailed documentation.
+        </p>
+    </div>
+    <div class="flex justify-center items-center gap-[70px] text-white flex-wrap text-[20px] font-bold mx-[8%]" style="font-family: Assistant,sans-serif;">
+        <div class="flex flex-col gap-[15px] p-[10px]">
+            <div class="overflow-hidden rounded-[50%] hover:border-[5px] hover:border-red-600 h-[250px] w-[250px] flex justify-center items-center">
+                <img src="{% static "assets/Chest Workout.jpg" %}" class="w-full h-full object-cover " alt="">
+            </div> 
+            <p class="text-center cursor-pointer hover:text-yellow-100">CHEST</p>  
+        </div>
+        <div class="flex flex-col gap-[15px] p-[10px]">
+            <div class="overflow-hidden rounded-[50%] hover:border-[5px] hover:border-red-600 h-[250px] w-[250px] flex justify-center items-center">
+                <img src="{% static "assets/Triceps Workout.webp" %}" class="w-full h-full object-cover " alt="">
+            </div> 
+            <p class="text-center cursor-pointer hover:text-yellow-100">TRICEPS</p>  
+        </div>
+        <div class="flex flex-col gap-[15px] p-[10px]">
+            <div class="overflow-hidden rounded-[50%] hover:border-[5px] hover:border-red-600 h-[250px] w-[250px] flex justify-center items-center">
+                <img src="{% static "assets/Bicep Workout.jpg" %}" class="w-full h-full object-cover " alt="">
+            </div> 
+            <p class="text-center cursor-pointer hover:text-yellow-100">BICEPS</p>  
+        </div>
+    </div>
+    <div class="flex justify-center items-center gap-[70px] text-white flex-wrap text-[20px] font-bold mx-[8%] mt-[50px] mb-[30px]" style="font-family: Assistant,sans-serif;">    
+        <div class="flex flex-col gap-[15px] p-[10px]">
+            <div class="overflow-hidden rounded-[50%] hover:border-[5px] hover:border-red-600 h-[250px] w-[250px] flex justify-center items-center">
+                <img src="{% static "assets/Shoulder Workout.jpg" %}" class="w-full h-full object-cover " alt="">
+            </div> 
+            <p class="text-center cursor-pointer hover:text-yellow-100">SHOULDERS</p>  
+        </div>
+        <div class="flex flex-col gap-[15px] p-[10px]">
+            <div class="overflow-hidden rounded-[50%] hover:border-[5px] hover:border-red-600 h-[250px] w-[250px] flex justify-center items-center">
+                <img src="{% static "assets/Back Workout.jpg" %}" class="w-full h-full object-cover " alt="">
+            </div> 
+            <p class="text-center cursor-pointer hover:text-yellow-100">BACK</p>  
+        </div>
+        <div class="flex flex-col gap-[15px] p-[10px]">
+            <div class="overflow-hidden rounded-[50%] hover:border-[5px] hover:border-red-600 h-[250px] w-[250px] flex justify-center items-center">
+                <img src="{% static "assets/Legs Workout.png" %}" class="w-full h-full object-cover " alt="">
+            </div> 
+            <p class="text-center cursor-pointer hover:text-yellow-100">LEGS</p>  
+        </div> 
+    </div>
+    <!-- About US -->
+    <div id="About" class="bg-[#0C0C0C] h-[60px] text-[38px] text-center font-semibold text-[#ffff] py-[7px] tracking-wider my-[100px] mb-[50px]"
+    style="font-family: Bebas Neue, sans-serif;">
+    <p>About Us</p>
+    </div>
+    <div class="mx-[15%] text-[17px] text-slate-300 text-justify flex justify-center items-center gap-[15px] flex-col mb-[120px]">
+        <p>Welcome to our Workout Planner web application! Our mission is to empower individuals to achieve their fitness goals by providing a simple and effective tool for planning and tracking workouts. Whether you're a beginner or an experienced athlete, our platform is designed to help you stay organized, motivated, and on track.
+        </p>
+        <p>
+        We understand that everyone's fitness journey is unique, which is why our Workout Planner allows you to customize your workout schedule according to your personal preferences and goals. From strength training and cardio to flexibility exercises and rest days, you can plan every detail of your fitness regimen.
+        </p>
+    </div>
+    
+    <!-- Contact Us -->
+    <footer id="Contact" class="bg-white shadow dark:bg-gray-900">
+    <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
+    <div class="sm:flex sm:items-center sm:justify-between">
+        <a href="#Home" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
+            <img src="{% static "assets/barbell-logo.png" %}" class="h-8" alt="Flowbite Logo" />
+            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">FitBuddy</span>
+        </a>
+        <ul class="flex flex-wrap gap-1 items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
+            <li>
+                <a href="#About" class="hover:underline me-4 md:me-6">About</a>
+            </li>
+            <li>
+                <a href="#" class="hover:underline md:me-6">Privacy Policy</a>
+            </li>
+            <li>
+                <i class="fa-brands fa-whatsapp text-[25px] mr-[10px] cursor-pointer hover:text-red-600"></i>
+            </li>
+            <li>
+                <i class="fa-brands fa-github-alt text-[25px] mr-[10px] cursor-pointer hover:text-red-600"></i>
+            </li>
+            <li>
+                <i class="fa-brands fa-google-plus-g text-[25px] cursor-pointer hover:text-red-600"></i>
+            </li>
+        </ul>
+    </div>
+    <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+    <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="#Home" class="hover:underline">FitBuddy™</a>. All Rights Reserved.</span>
+</div>
+</footer>
+
+    
+</body>
+</html>

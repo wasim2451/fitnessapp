@@ -1,0 +1,58 @@
+{% load static %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoginPage</title>
+    <!-- <link rel="stylesheet" href="./output.css"> -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts Section -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Bebas+Neue&family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/6d2c452e18.js" crossorigin="anonymous"></script>
+</head>
+<body class="m-0 p-0 box-border bg-[#0C0C0C]" style="font-family: Poppins,sans-serif;">
+    <div class="w-[890px] min-h-[600px] flex relative" 
+    style="
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    bottom: 0px;
+    right: 0px;
+    ">
+    <div class="w-[50%] overflow-hidden">
+        <img src="{% static "assets/LogInImage.jpg" %}" alt="" class="w-full bg-cover blur-[1px] h-full">
+    </div>
+    <div class="w-[50%]"
+    style="
+    background-color: #481E14;
+    background-image: -webkit-linear-gradient(570deg, #3e0202 50%, #151515 50%);
+    "
+    >
+    <div class="py-[50px] flex flex-col justify-center items-center gap-3 px-[20px]">
+    <div class="w-[60px]">
+        <img src="{% static "assets/barbell-logo.png" %}" alt="" class="w-full rounded-[50%]">
+    </div>
+    <h1 class="text-white font-medium text-[35px] text-center">Welcome to <br> <span class="text-[#BE3144] font-bold ">FitBuddy</span></h2>
+    <form method="POST" action="{% provider_login_url 'google' %}">
+        {% csrf_token %}
+        <div class="flex flex-col justify-center items-center pt-[30px] gap-[10px]">
+            <button type="submit" class="bg-[#872341] w-[300px] rounded-[2px] text-[#fff]  py-[5px] text-[18px] font-semibold hover:bg-[#8B322C]">Login</button>
+            <p class="text-slate-400 text-[15px] px-[20px]"> or didn't have an account ? <span class="text-[#FF76CE] font-semibold hover:cursor-pointer hover:text-[#C65BCF]"> Sign Up</span></p>
+            <button type="submit" class="bg-[#86469C] w-[300px] rounded-[2px] text-[#fff] font-semibold  py-[5px] text-[17px] hover:bg-[#4A249D]"> <i class="fa-brands fa-google"></i> &nbsp;Continue with Google</button>
+         </div>
+    </form>
+    </div>
+    </div>
+    <div class="text-[50px] absolute bottom-[18px] text-slate-300 left-[34%] tracking-wider" style="font-family:Bebas Neue, sans-serif;
+    /* color: transparent;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color:#fff; */
+    ">THINK &nbsp;&nbsp;&nbsp;&nbsp;DIFFERENT</div>
+    </div>
+    
+</html>

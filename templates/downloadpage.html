@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Report</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Bebas+Neue&family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- <style>
+        .workout-report-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .workout-report-table th, .workout-report-table td {
+            border: 2px solid #cbd5e0; /* Gray-400 for border */
+            padding: 8px 12px;
+            text-align: center;
+        }
+        .workout-report-table th {
+            background-color: #f1f5f9; /* Gray-200 for header background */
+            font-weight: 600;
+        }
+        .workout-report-table td {
+            background-color: #fff; /* White for cell background */
+        }
+    </style> -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            html {
+            scroll-behavior:smooth;
+            }
+            .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: rgb(46, 46, 46);
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: #FFFFFF;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #555555;
+            color: aqua;
+
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .dropbtn {
+            background-color: transparent;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+        }
+    </style>
+    <script src="https://kit.fontawesome.com/6d2c452e18.js" crossorigin="anonymous"></script>
+</head>
+<body class="m-0 p-0 box-border">
+    <nav id="navbar" class="z-50 min-h-[47px] py-3 w-full bg-[rgb(0,0,0,0.9)] px-[150px] flex justify-between gap-3 backdrop-blur-sm">
+        <div class="text-[28px] font-bold italic text-[#EA906C] flex justify-center items-center gap-[15px]">
+            <img src="{% static 'assets/barbell-logo.png' %}" alt="" class="w-[45px]">
+            <p style="font-family: Assistant, sans-serif;">FitBUDDY</p>
+        </div>
+        <div class="flex justify-center items-center gap-[50px] font-semibold text-[17px] text-white">
+            <p class="hover:text-[#FFF455] cursor-pointer"><a href="#">Home</a></p>
+            <p class="hover:text-[#FFF455] cursor-pointer"><a href="#">About us</a></p>
+            <p class="hover:text-[#FFF455] cursor-pointer"><a href="#">Contact us</a></p>
+            <p class="hover:text-[#FFF455] cursor-pointer"><a href="https://shop.trustified.co.in/" target="_blank">Shop Now</a></p>
+        </div>
+        <div class="text-[15px] text-white font-bold flex justify-center items-center gap-[5px]" style="font-family: Ubuntu,sans-serif;">
+            {% if user.is_authenticated %}
+            <div class="dropdown">
+                <button class="dropbtn">{{ user.first_name }} 🔽</button>
+                <div class="dropdown-content">
+                    <a href="/dashboard">Dashboard</a>
+                    <a href="/logout">Log Out</a>
+                    <a href="/tracker">Start Logging Workout</a>
+                </div>
+            </div>
+            <img class="rounded-[50%] w-[39px] hover:cursor-pointer" src="{{ profile_pic_url }}" alt="">
+            <img src="{% static 'assets/Cart.png' %}" class="w-[38px] hover:cursor-pointer" alt="">
+            {% else %}
+            <p class="hover:text-[#FF9898]"><a href='/login'>Log in</a></p>
+            <img class="w-[38px] hover:cursor-pointer mr-2" src="{% static 'assets/user_logo.png' %}" alt="">
+            <a href="https://shop.trustified.co.in/" target="_blank"><img src="{% static 'assets/Cart.png' %}" class="w-[38px] hover:cursor-pointer" alt=""></a>
+            {% endif %}
+         </div>
+    </nav>
+
+    <div class="grid place-content-center place-items-center font-light text-slate-900" style="font-family: Assistant, sans-serif;">
+        <div id="Download" class="min-h-[500px] w-[850px] mt-[5%] flex flex-col items-center gap-[20px] pt-[20px] pb-[20px]">
+            <p class="text-[30px] font-bold text-center tracking-wider" style="font-family: Bebas Neue, sans-serif;">&nbsp;&nbsp;&nbsp;FitBuddy <i class="fa-solid fa-dumbbell ml-[10px]"></i></p>
+            <p class="text-[24px] italic font-light">Workout Report</p>
+            <p class="text-[19px] font-bold text-center pl-[15px] italic">Date: {{ workout_session.date|date:"d/m/Y" }}</p>
+            <table class="workout-report-table w-[630px] p-[15px] border-slate-400 border-[2px] text-center">
+                <tr class="border-[2px] bg-slate-200 border-slate-400">
+                    <th>Workout</th>
+                    <th>Sets</th>
+                    <th>Weights (kg)</th>
+                    <th>Reps</th>
+                </tr>
+                {% for set_detail in set_details %}
+                <tr>
+                    <td>{{ set_detail.exercise.name }}</td>
+                    <td>{{ set_detail.set_number }}</td>
+                    <td>{% if set_detail.weight > 0 %}{{ set_detail.weight }}{% endif %}</td>
+                    <td class="border-b-[2px] border-b-slate-400">{% if set_detail.reps > 0 %}{{ set_detail.reps }}{% endif %}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No workout details available.</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <div class="text-[17px] mt-[30px]" id="copyright" style="display: none;">@WK || NK || SS</div>
+        </div>
+        <div class="opacity-85 font-bold text-[23px] flex justify-center items-center my-[35px] mb-[55px]">
+            <button id="Download" onclick="downloadPDF()" class="min-w-[192px] text-center px-[40px] py-[7px] tracking-wider bg-green-600 hover:bg-orange-700 text-white border-[1px] border-red-500">Download PDF</button>
+        </div>
+    </div>
+
+    <script>
+        function downloadPDF() {
+        const workoutPDF = this.document.getElementById("Download");
+            console.log(workoutPDF);
+            console.log(window);
+            var opt = {
+                margin: [0,-0.3,0,0.4],
+                filename: 'Workout.pdf',
+                image: { type: 'jpeg', quality: 1 },
+                html2canvas: { scale: 5 },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+        html2pdf().from(workoutPDF).set(opt).save();
+        const copyright=document.getElementById("copyright");
+        copyright.style.display="block";
+    
+  }
+    </script>
+</body>
+</html>

@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% load socialaccount %}
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WokoutTrack Page</title>
+<!-- <link rel="stylesheet" href="./output.css"> -->
+
+<!-- Tailwind Script -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Links Font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Bebas+Neue&family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+rel="stylesheet">
+<style type="text/tailwindcss">
+    @layer utilities {
+        html {
+        scroll-behavior:smooth;
+    }
+    .button-submit{
+        border-color: #1A5319;
+    }
+    .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: rgb(46, 46, 46);
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: #FFFFFF;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #555555;
+            color: aqua;
+
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .dropbtn {
+            background-color: transparent;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+}
+</style>
+<script src="https://kit.fontawesome.com/6d2c452e18.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-[#1F1717] text-[#e4e4e4]" style="font-family: Poppins,sans-serif;">
+<!-- Navigation Bar Starts -->
+<nav class="z-50 min-h-[47px] py-3 w-full bg-[rgb(0,0,0,0.3)] px-[150px] flex justify-between gap-3  backdrop-blur-sm">
+    <!-- Logo Div -->
+     <div class="text-[28px] font-bold italic text-[#EA906C] flex justify-center items-center gap-[15px] ">
+        <img src="../assets/barbell-logo.png" alt="" class="w-[45px]">
+        <p style="font-family:Assistant, sans-serif;">FitBUDDY</p>
+     </div>
+     <!-- Our Details Div -->
+     <div class=" flex justify-center items-center gap-[50px] font-semibold text-[17px] text-white">
+        <p class="hover:text-[#FFF455] cursor-pointer"><a href="#Home">Home</a></p>
+        <p class="hover:text-[#FFF455] cursor-pointer"><a href="">About us</a></p>
+        <p class="hover:text-[#FFF455] cursor-pointer"><a href="">Contact us</a></p>
+        <p class="hover:text-[#FFF455] cursor-pointer"><a href="https://shop.trustified.co.in/">Shop Now</a></p>
+     </div>
+     <!-- User Div -->
+     <div class="text-[15px] text-white font-bold flex justify-center items-center gap-[20px]" style="font-family: Ubuntu,sans-serif;">
+        {% if user.is_authenticated %}
+       <div class="dropdown">
+           <button class="dropbtn">{{ user.first_name }} 🔽</button>
+           <div class="dropdown-content">
+               <a href="/dashboard">Dashboard</a>
+               <a href="/logout">Log Out</a>
+               <a href="/tracker">Start Logging Workout</a>
+           </div>
+       </div>
+       <img class="rounded-[50%] w-[39px] hover:cursor-pointer" src="{{ profile_pic_url }}" alt="">
+       <img src="{% static 'assets/Cart.png' %}" class="w-[38px] hover:cursor-pointer" alt="">
+       {% else %}
+       <p class="hover:text-[#FF9898]"><a href='/login'>Log in</a></p>
+       <img class="w-[38px] hover:cursor-pointer mr-2" src="{% static 'assets/user_logo.png' %}" alt="">
+       <a href="https://shop.trustified.co.in/"><img src="{% static 'assets/Cart.png' %}" class="w-[38px] hover:cursor-pointer" alt=""></a>
+       {% endif %}
+    </div>
+ </nav>
+ <!-- NavBar Ends -->
+ <!-- Banner Starts -->
+<div class="bg-[#FF6347] h-[60px] text-[38px] text-center font-semibold text-[#ffff] py-[7px] tracking-wider"
+style="font-family: Bebas Neue, sans-serif;">
+<p>Your Fitness &nbsp; Your Plan!</p>
+</div>
+<!-- Banner Ends -->
+<div class="grid place-items-center place-content-center">
+    <div class=" w-[1000px] text-[40px] font-medium tracking-[2px] pt-[45px] text-[#FF6347] text-center bg-[#1E1E1E]"
+    style="font-family: Bebas Neue, sans-serif;">
+     START LOGGING &nbsp; 
+    <i class="fa-solid fa-dumbbell"></i>
+    </div>
+</div>
+<div class="grid place-items-center place-content-center">
+<!-- Form Start -->
+{% csrf_token %}
+<form action="/handleSubmit" method="POST">    
+<div class="flex flex-col items-center gap-[20px] bg-[#1E1E1E]">
+<!-- Date ki Entry from User -->
+    <div class="justify-center items-center flex mt-[30px] ">
+        <p class="">
+            <label for="date-entry" class="mr-[15px] font-semibold mb-2 text-[20px] tracking-wide"> Choose DATE </label>
+            <input id="date" name="date" class="p-[10px] border-[1px] opacity-80 border-slate-400 bg-[#2E2E2E]"
+                type="date" name="date">
+        </p>
+    </div>
+
+<!-- Din ka 1st Workout Entry Under Same Date-->
+    <div class="w-[1000px] min-h-[350px] bg-[#1E1E1E]">
+
+        <div
+            class=" flex justify-around items-center min-h-[40px] font-semibold bg-[#C73659] tracking-wide w-full overflow-hidden py-[10px] mb-[5px] mt-[20px]">
+            <div>Workout</div>
+            <div>Sets</div>
+            <div>Weights</div>
+            <div>Reps</div>
+        </div>
+        <div class="flex flex-col  gap-[15px] mt-[10px]">
+            <!-- Set 1  -->
+            <div class=" min-h-[50px] flex justify-around items-center">
+                <select id="workout-1-options" class="p-[10px] mr-[30px] opacity-85 bg-[#2E2E2E] font-semibold "
+                     name="workout-1-options" >
+                    <option value="" selected disabled>Choose Workout</option>
+                    <option value="bench press">Bench Press</option>
+                    <option value="pec deck fly">Pec Deck Fly</option>
+                    <option value="lat pull down">Lat Pull Down</option>
+                    <option value="deadlift">Deadlift</option>
+                    <option value="squat">Squat</option>
+                    <option value="legpress">Leg Press</option>
+                    <option value="shoulder press">Shoulder Press</option>
+                    <option value="lateral raises">Lateral Raise</option>
+                    <option value="bicep curl">Bicep Curl</option>
+                    <option value="triceps pushdown">Triceps Pushdown</option>
+                </select>
+                <p class="w-[120px] font-semibold text-[18px] text-center mr-[50px] ml-[0px]">1</p>
+                <div class="w-[170px]">
+                    <input id="workout-1-set1-weights" name="workout-1-set1-weights" type="number" min="0"" placeholder="Enter Weights" 
+                        class=" w-full text-[#fff] p-[10px] pr-[15px] opacity-80 bg-[#2E2E2E] font-semibold">
+                </div>
+                <div class="w-[170px]">
+                    <input id="workout-1-set1-reps" name="workout-1-set1-reps" type="number" min="0" placeholder="Enter Reps" 
+                    
+                        class=" text-[#fff] p-[10px] pr-[15px] w-full opacity-85 bg-[#2E2E2E] font-semibold">
+                </div>
+            </div>
+            <!-- Set 2 -->
+            <div class=" min-h-[40px] items-center flex justify-around">
+                <div class="w-[192px] p-[10px] mr-[30px] opacity-85 "></div>
+                <p class="w-[120px] font-semibold text-[18px] text-center mr-[50px] ml-[0px]">2</p>
+                <div class="w-[170px]">
+                    <input id="workout-1-set2-weights" name="workout-1-set2-weights" type="number" min="0"" placeholder="Enter Weights" 
+                        class=" w-full text-[#fff] p-[10px] pr-[15px] opacity-80 bg-[#2E2E2E] font-semibold">
+                </div>
+                <div class="w-[170px]">
+                    <input id="workout-1-set2-reps" name="workout-1-set2-reps" type="number" min="0" placeholder="Enter Reps" 
+                        class=" text-[#fff] p-[10px] pr-[15px] w-full opacity-85 bg-[#2E2E2E] font-semibold">
+                </div>
+            </div>
+            <!-- Set 3 -->
+            <div class=" min-h-[40px] flex justify-around items-center">
+                <div class="w-[192px] p-[10px] mr-[30px] opacity-85 "></div>
+                <p class="w-[120px] font-semibold text-[18px] text-center mr-[50px] ml-[0px]">3</p>
+                <div class="w-[170px]">
+                    <input id="workout-1-set3-weights" name="workout-1-set3-weights" type="number" min="0"" placeholder="Enter Weights" 
+                        class=" w-full text-[#fff] p-[10px] pr-[15px] opacity-80 bg-[#2E2E2E] font-semibold">
+                </div>
+                <div class="w-[170px]">
+                    <input id="workout-1-set3-reps" name="workout-1-set3-reps" type="number" min="0" placeholder="Enter Reps" 
+                        class=" text-[#fff] p-[10px] pr-[15px] w-full opacity-85 bg-[#2E2E2E] font-semibold">
+                </div>
+            </div>
+            <!-- Set 4 -->
+            <div class=" min-h-[40px] flex justify-around items-center">
+                <div class="w-[192px] p-[10px] mr-[30px] opacity-85 "></div>
+                <p class="w-[120px] font-semibold text-[18px] text-center mr-[50px] ml-[0px]">4</p>
+                <div class="w-[170px]">
+                    <input id="workout-1-set4-weights" name="workout-1-set4-weights" type="number" min="0"" placeholder="Enter Weights" 
+                        class=" w-full text-[#fff] p-[10px] pr-[15px] opacity-80 bg-[#2E2E2E] font-semibold">
+                </div>
+                <div class="w-[170px]">
+                    <input id="workout-1-set4-reps" name="workout-1-set4-reps" type="number" min="0" placeholder="Enter Reps" 
+                        class=" text-[#fff] p-[10px] pr-[15px] w-full opacity-85 bg-[#2E2E2E] font-semibold">
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Din ka 2nd Workout Entry Under Same Date-->
+    <div class="w-[1000px] min-h-[350px] bg-[#1E1E1E] ">
+        <div
+            class=" flex justify-around items-center min-h-[40px] font-semibold bg-[#1F4068] tracking-wide w-full overflow-hidden py-[10px] mb-[5px] mt-[20px]">
+            <div>Workout</div>
+            <div>Sets</div>
+            <div>Weights</div>
+            <div>Reps</div>
+        </div>
+        <div class="flex flex-col  gap-[15px] mt-[10px]">
+            <!-- Set 1  -->
+            <div class=" min-h-[50px] flex justify-around items-center">
+                <select id="workout-2-options" class="p-[10px] mr-[30px] opacity-85 bg-[#2E2E2E] font-semibold "
+                     name="workout-2-options" >
+                    <option value="" selected disabled>Choose Workout</option>
+                    <option value="bench press">Bench Press</option>
+                    <option value="pec deck fly">Pec Deck Fly</option>
+                    <option value="lat pull down">Lat Pull Down</option>
+                    <option value="deadlift">Deadlift</option>
+                    <option value="squat">Squat</option>
+                    <option value="legpress">Leg Press</option>
+                    <option value="shoulder press">Shoulder Press</option>
+                    <option value="lateral raises">Lateral Raise</option>
+                    <option value="bicep curl">Bicep Curl</option>
+                    <option value="triceps pushdown">Triceps Pushdown</option>
+                </select>
+                <p class="w-[120px] font-semibold text-[18px] text-center mr-[50px] ml-[0px]">1</p>
+                <div class="w-[170px]">
+                    <input name="workout-2-set1-weights" id="workout-2-set1-weights" type="number" min="0"" placeholder="Enter Weights" 
+                        class=" w-full text-[#fff] p-[10px] pr-[15px] opacity-80 bg-[#2E2E2E] font-semibold">
+                </div>
+                <div class="w-[170px]">
+                    <input id="workout-2-set1-reps" name="workout-2-set1-reps" type="number" min="0" placeholder="Enter Reps" 
+                        class=" text-[#fff] p-[10px] pr-[15px] w-full opacity-85 bg-[#2E2E2E] font-semibold">
+                </div>
+            </div>
+            <!-- Set 2 -->
+            <div class=" min-h-[40px] items-center flex justify-around">
+                <div class="w-[192px] p-[10px] mr-[30px] opacity-85 "></div>
+                <p class="w-[120px] font-semibold text-[18px] text-center mr-[50px] ml-[0px]">2</p>
+                <div class="w-[170px]">
+                    <input id="workout-2-set2-weights" name="workout-2-set2-weights" type="number" min="0"" placeholder="Enter Weights" 
+                        class=" w-full text-[#fff] p-[10px] pr-[15px] opacity-80 bg-[#2E2E2E] font-semibold">
+                </div>
+                <div class="w-[170px]">
+                    <input id="workout-2-set2-reps" name="workout-2-set2-reps" type="number" min="0" placeholder="Enter Reps" 
+                        class=" text-[#fff] p-[10px] pr-[15px] w-full opacity-85 bg-[#2E2E2E] font-semibold">
+                </div>
+            </div>
+            <!-- Set 3 -->
+            <div class=" min-h-[40px] flex justify-around items-center">
+                <div class="w-[192px] p-[10px] mr-[30px] opacity-85 "></div>
+                <p class="w-[120px] font-semibold text-[18px] text-center mr-[50px] ml-[0px]">3</p>
+                <div class="w-[170px]">
+                    <input id="workout-2-set3-weights" name="workout-2-set3-weights" type="number" min="0"" placeholder="Enter Weights" 
+                        class=" w-full text-[#fff] p-[10px] pr-[15px] opacity-80 bg-[#2E2E2E] font-semibold">
+                </div>
+                <div class="w-[170px]">
+                    <input id="workout-2-set3-reps" name="workout-2-set3-reps" type="number" min="0" placeholder="Enter Reps" 
+                        class=" text-[#fff] p-[10px] pr-[15px] w-full opacity-85 bg-[#2E2E2E] font-semibold">
+                </div>
+            </div>
+            <!-- Set 4 -->
+            <div class=" min-h-[40px] flex justify-around items-center">
+                <div class="w-[192px] p-[10px] mr-[30px] opacity-85 "></div>
+                <p class="w-[120px] font-semibold text-[18px] text-center mr-[50px] ml-[0px]">4</p>
+                <div class="w-[170px]">
+                    <input id="workout-2-set4-weights" name="workout-2-set4-weights" type="number" min="0"" placeholder="Enter Weights" 
+                        class=" w-full text-[#fff] p-[10px] pr-[15px] opacity-80 bg-[#2E2E2E] font-semibold">
+                </div>
+                <div class="w-[170px]">
+                    <input id="workout-2-set4-reps" name="workout-2-set4-reps" type="number" min="0" placeholder="Enter Reps" 
+                        class=" text-[#fff] p-[10px] pr-[15px] w-full opacity-85 bg-[#2E2E2E] font-semibold">
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Din ka 3rd Workout Entry Under Same Date-->
+    <div class="w-[1000px] min-h-[350px] bg-[#1E1E1E] ">
+        <div
+            class=" flex justify-around items-center min-h-[40px] font-semibold bg-[#006769] tracking-wide w-full overflow-hidden py-[10px] mb-[5px]">
+            <div>Workout</div>
+            <div>Sets</div>
+            <div>Weights</div>
+            <div>Reps</div>
+        </div>
+        <div class="flex flex-col  gap-[15px] mt-[10px]">
+            <!-- Set 1  -->
+            <div class=" min-h-[50px] flex justify-around items-center">
+                <select id="workout-3-options" name="workout-3-options" class="p-[10px] mr-[30px] opacity-85 bg-[#2E2E2E] font-semibold "
+                      >
+                    <option value="" selected disabled>Choose Workout</option>
+                    <option value="bench press">Bench Press</option>
+                    <option value="pec deck fly">Pec Deck Fly</option>
+                    <option value="lat pull down">Lat Pull Down</option>
+                    <option value="deadlift">Deadlift</option>
+                    <option value="squat">Squat</option>
+                    <option value="legpress">Leg Press</option>
+                    <option value="shoulder press">Shoulder Press</option>
+                    <option value="lateral raises">Lateral Raise</option>
+                    <option value="bicep curl">Bicep Curl</option>
+                    <option value="triceps pushdown">Triceps Pushdown</option>
+                </select>
+                <p class="w-[120px] font-semibold text-[18px] text-center mr-[50px] ml-[0px]">1</p>
+                <div class="w-[170px]">
+                    <input id="workout-3-set1-weights" name="workout-3-set1-weights" type="number" min="0"" placeholder="Enter Weights" 
+                        class=" w-full text-[#fff] p-[10px] pr-[15px] opacity-80 bg-[#2E2E2E] font-semibold">
+                </div>
+                <div class="w-[170px]">
+                    <input id="workout-3-set1-reps" name="workout-3-set1-reps" type="number" min="0" placeholder="Enter Reps" 
+                        class=" text-[#fff] p-[10px] pr-[15px] w-full opacity-85 bg-[#2E2E2E] font-semibold">
+                </div>
+            </div>
+            <!-- Set 2 -->
+            <div class=" min-h-[40px] items-center flex justify-around">
+                <div class="w-[192px] p-[10px] mr-[30px] opacity-85 "></div>
+                <p class="w-[120px] font-semibold text-[18px] text-center mr-[50px] ml-[0px]">2</p>
+                <div class="w-[170px]">
+                    <input id="workout-3-set2-weights" name="workout-3-set2-weights" type="number" min="0"" placeholder="Enter Weights" 
+                        class=" w-full text-[#fff] p-[10px] pr-[15px] opacity-80 bg-[#2E2E2E] font-semibold">
+                </div>
+                <div class="w-[170px]">
+                    <input id="workout-3-set2-reps" name="workout-3-set2-reps" type="number" min="0" placeholder="Enter Reps" 
+                        class=" text-[#fff] p-[10px] pr-[15px] w-full opacity-85 bg-[#2E2E2E] font-semibold">
+                </div>
+            </div>
+            <!-- Set 3 -->
+            <div class=" min-h-[40px] flex justify-around items-center">
+                <div class="w-[192px] p-[10px] mr-[30px] opacity-85 "></div>
+                <p class="w-[120px] font-semibold text-[18px] text-center mr-[50px] ml-[0px]">3</p>
+                <div class="w-[170px]">
+                    <input id="workout-3-set3-weights" name="workout-3-set3-weights" type="number" min="0"" placeholder="Enter Weights" 
+                        class=" w-full text-[#fff] p-[10px] pr-[15px] opacity-80 bg-[#2E2E2E] font-semibold">
+                </div>
+                <div class="w-[170px]">
+                    <input id="workout-3-set3-reps" name="workout-3-set3-reps" type="number" min="0" placeholder="Enter Reps" 
+                        class=" text-[#fff] p-[10px] pr-[15px] w-full opacity-85 bg-[#2E2E2E] font-semibold">
+                </div>
+            </div>
+            <!-- Set 4 -->
+            <div class=" min-h-[40px] flex justify-around items-center">
+                <div class="w-[192px] p-[10px] mr-[30px] opacity-85 "></div>
+                <p class="w-[120px] font-semibold text-[18px] text-center mr-[50px] ml-[0px]">4</p>
+                <div class="w-[170px]">
+                    <input id="workout-3-set4-weights" name="workout-3-set4-weights" type="number" min="0"" placeholder="Enter Weights" 
+                        class=" w-full text-[#fff] p-[10px] pr-[15px] opacity-80 bg-[#2E2E2E] font-semibold">
+                </div>
+                <div class="w-[170px]">
+                    <input id="workout-3-set4-reps" name="workout-3-set4-reps" type="number" min="0" placeholder="Enter Reps" 
+                        class=" text-[#fff] p-[10px] pr-[15px] w-full opacity-85 bg-[#2E2E2E] font-semibold">
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Din ka 4th Workout Entry Under Same Date -->
+    <div class="w-[1000px] min-h-[350px] bg-[#1E1E1E] ">
+        <div
+            class=" flex justify-around items-center min-h-[40px] font-semibold bg-[#6C0345] tracking-wide w-full overflow-hidden">
+            <div>Workout</div>
+            <div>Sets</div>
+            <div>Weights</div>
+            <div>Reps</div>
+        </div>
+        <div class="flex flex-col  gap-[15px] mt-[10px]">
+            <!-- Set 1  -->
+            <div class=" min-h-[50px] flex justify-around items-center">
+                <select id="workout-4-options" name="workout-4-options" class="p-[10px] mr-[30px] opacity-85 bg-[#2E2E2E] font-semibold "
+                     name="workout" >
+                    <option value="" selected disabled>Choose Workout</option>
+                    <option value="bench press">Bench Press</option>
+                    <option value="pec deck fly">Pec Deck Fly</option>
+                    <option value="lat pull down">Lat Pull Down</option>
+                    <option value="deadlift">Deadlift</option>
+                    <option value="squat">Squat</option>
+                    <option value="legpress">Leg Press</option>
+                    <option value="shoulder press">Shoulder Press</option>
+                    <option value="lateral raises">Lateral Raise</option>
+                    <option value="bicep curl">Bicep Curl</option>
+                    <option value="triceps pushdown">Triceps Pushdown</option>
+                </select>
+                <p class="w-[120px] font-semibold text-[18px] text-center mr-[50px] ml-[0px]">1</p>
+                <div class="w-[170px]">
+                    <input id="workout-4-set1-weights" name="workout-4-set1-weights" type="number" min="0"" placeholder="Enter Weights" 
+                        class=" w-full text-[#fff] p-[10px] pr-[15px] opacity-80 bg-[#2E2E2E] font-semibold">
+                </div>
+                <div class="w-[170px]">
+                    <input id="workout-4-set1-reps" name="workout-4-set1-reps" type="number" min="0" placeholder="Enter Reps" 
+                        class=" text-[#fff] p-[10px] pr-[15px] w-full opacity-85 bg-[#2E2E2E] font-semibold">
+                </div>
+            </div>
+            <!-- Set 2 -->
+            <div class=" min-h-[40px] items-center flex justify-around">
+                <div class="w-[192px] p-[10px] mr-[30px] opacity-85 "></div>
+                <p class="w-[120px] font-semibold text-[18px] text-center mr-[50px] ml-[0px]">2</p>
+                <div class="w-[170px]">
+                    <input id="workout-4-set2-weights" name="workout-4-set2-weights" type="number" min="0"" placeholder="Enter Weights" 
+                        class=" w-full text-[#fff] p-[10px] pr-[15px] opacity-80 bg-[#2E2E2E] font-semibold">
+                </div>
+                <div class="w-[170px]">
+                    <input id="workout-4-set2-reps" name="workout-4-set2-reps" type="number" min="0" placeholder="Enter Reps" 
+                        class=" text-[#fff] p-[10px] pr-[15px] w-full opacity-85 bg-[#2E2E2E] font-semibold">
+                </div>
+            </div>
+            <!-- Set 3 -->
+            <div class=" min-h-[40px] flex justify-around items-center">
+                <div class="w-[192px] p-[10px] mr-[30px]"></div>
+                <p class="w-[120px] font-semibold text-[18px] text-center mr-[50px] ml-[0px]">3</p>
+                <div class="w-[170px]">
+                    <input id="workout-4-set3-weights" name="workout-4-set3-weights" type="number" min="0"" placeholder="Enter Weights" 
+                        class=" w-full text-[#fff] p-[10px] pr-[15px] opacity-80 bg-[#2E2E2E] font-semibold">
+                </div>
+                <div class="w-[170px]">
+                    <input id="workout-4-set3-reps" name="workout-4-set3-reps" type="number" min="0" placeholder="Enter Reps" 
+                        class=" text-[#fff] p-[10px] pr-[15px] w-full opacity-85 bg-[#2E2E2E] font-semibold">
+                </div>
+            </div>
+            <!-- Set 4 -->
+            <div class=" min-h-[40px] flex justify-around items-center">
+                <div class="w-[192px] p-[10px] mr-[30px]"></div>
+                <p class="w-[120px] font-semibold text-[18px] text-center mr-[50px] ml-[0px]">4</p>
+                <div class="w-[170px]">
+                    <input id="workout-4-set4-weights" name="workout-4-set4-weights" type="number" min="0"" placeholder="Enter Weights" 
+                        class=" w-full text-[#fff] p-[10px] pr-[15px] opacity-80 bg-[#2E2E2E] font-semibold">
+                </div>
+                <div class="w-[170px]">
+                    <input id="workout-4-set4-reps" name="workout-4-set4-reps" type="number" min="0" placeholder="Enter Reps" 
+                        class=" text-[#fff] p-[10px] pr-[15px] w-full opacity-85 bg-[#2E2E2E] font-semibold">
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Din ka 5th Workout Entry Under Same Date -->
+    <div class="w-[1000px] min-h-[350px] bg-[rgb(30,30,30)] pb-0 mb-[10px]">
+        <div
+            class=" flex justify-around items-center min-h-[40px] font-semibold bg-[#416D19] tracking-wide w-full overflow-hidden py-[10px] mb-[5px] mt-[20px]">
+            <div>Workout</div>
+            <div>Sets</div>
+            <div>Weights</div>
+            <div>Reps</div>
+        </div>
+        <div class="flex flex-col  gap-[15px] mt-[10px]">
+            <!-- Set 1  -->
+            <div class=" min-h-[50px] flex justify-around items-center">
+                <select id="workout-5-options" name="workout-5-options" class="p-[10px] mr-[30px] opacity-85 bg-[#2E2E2E] font-semibold "
+                     name="workout" id="Workout" >
+                    <option value="" selected disabled>Choose Workout</option>
+                    <option value="bench press">Bench Press</option>
+                    <option value="pec deck fly">Pec Deck Fly</option>
+                    <option value="lat pull down">Lat Pull Down</option>
+                    <option value="deadlift">Deadlift</option>
+                    <option value="squat">Squat</option>
+                    <option value="legpress">Leg Press</option>
+                    <option value="shoulder press">Shoulder Press</option>
+                    <option value="lateral raises">Lateral Raise</option>
+                    <option value="bicep curl">Bicep Curl</option>
+                    <option value="triceps pushdown">Triceps Pushdown</option>
+                </select>
+                <p class="w-[120px] font-semibold text-[18px] text-center mr-[50px] ml-[0px]">1</p>
+                <div class="w-[170px]">
+                    <input id="workout-5-set1-weights" name="workout-5-set1-weights" type="number" min="0"" placeholder="Enter Weights" 
+                        class=" w-full text-[#fff] p-[10px] pr-[15px] opacity-80 bg-[#2E2E2E] font-semibold">
+                </div>
+                <div class="w-[170px]">
+                    <input id="workout-5-set1-reps" name="workout-5-set1-reps" type="number" min="0" placeholder="Enter Reps" 
+                        class=" text-[#fff] p-[10px] pr-[15px] w-full opacity-85 bg-[#2E2E2E] font-semibold">
+                </div>
+            </div>
+            <!-- Set 2 -->
+            <div class=" min-h-[40px] items-center flex justify-around">
+                <div class="w-[192px] p-[10px] mr-[30px] opacity-85 "></div>
+                <p class="w-[120px] font-semibold text-[18px] text-center mr-[50px] ml-[0px]">2</p>
+                <div class="w-[170px]">
+                    <input id="workout-5-set2-weights" name="workout-5-set2-weights" type="number" min="0"" placeholder="Enter Weights" 
+                        class=" w-full text-[#fff] p-[10px] pr-[15px] opacity-80 bg-[#2E2E2E] font-semibold">
+                </div>
+                <div class="w-[170px]">
+                    <input id="workout-5-set2-reps" name="workout-5-set2-reps" type="number" min="0" placeholder="Enter Reps" 
+                        class=" text-[#fff] p-[10px] pr-[15px] w-full opacity-85 bg-[#2E2E2E] font-semibold">
+                </div>
+            </div>
+            <!-- Set 3 -->
+            <div class=" min-h-[40px] flex justify-around items-center">
+                <div class="w-[192px] p-[10px] mr-[30px] opacity-85 "></div>
+                <p class="w-[120px] font-semibold text-[18px] text-center mr-[50px] ml-[0px]">3</p>
+                <div class="w-[170px]">
+                    <input id="workout-5-set3-weights" name="workout-5-set3-weights" type="number" min="0"" placeholder="Enter Weights" 
+                        class=" w-full text-[#fff] p-[10px] pr-[15px] opacity-80 bg-[#2E2E2E] font-semibold">
+                </div>
+                <div class="w-[170px]">
+                    <input id="workout-5-set3-reps" name="workout-5-set3-reps" type="number" min="0" placeholder="Enter Reps" 
+                        class=" text-[#fff] p-[10px] pr-[15px] w-full opacity-85 bg-[#2E2E2E] font-semibold">
+                </div>
+            </div>
+            <!-- Set 4 -->
+            <div class=" min-h-[40px] flex justify-around items-center">
+                <div class="w-[192px] p-[10px] mr-[30px] opacity-85 "></div>
+                <p class="w-[120px] font-semibold text-[18px] text-center mr-[50px] ml-[0px]">4</p>
+                <div class="w-[170px]">
+                    <input id="workout-5-set4-weights" name="workout-5-set4-weights" type="number" min="0"" placeholder="Enter Weights" 
+                        class=" w-full text-[#fff] p-[10px] pr-[15px] opacity-80 bg-[#2E2E2E] font-semibold">
+                </div>
+                <div class="w-[170px]">
+                    <input id="workout-5-set4-reps" name="workout-5-set4-reps" type="number" min="0" placeholder="Enter Reps" 
+                        class=" text-[#fff] p-[10px] pr-[15px] w-full opacity-85 bg-[#2E2E2E] font-semibold">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class=" opacity-85 font-bold text-[23px] flex justify-center items-center ">
+            <button id="button-submit" type="submit"
+                class="min-w-[192px] text-center px-[30px] py-[5px] tracking-wider 
+                bg-orange-500 hover:bg-orange-700 text-white border-[1px] border-red-950
+                hover:border-red-400"
+                >SUBMIT
+            </button>
+    </div>
+
+    <!-- Submit Button Ends -->
+    <div class="min-h-[100px]">
+        <p class="text-center text-[40px] text-[#FF6347]"><i class="fa-solid fa-dumbbell"></i></p>
+    </div>
+</div>
+</form>
+<!-- Form End -->
+</div>
+
+</body>
+
+</html>
