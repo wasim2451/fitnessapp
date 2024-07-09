@@ -13,25 +13,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Bebas+Neue&family=Bona+Nova+SC:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <!-- <style>
-        .workout-report-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        .workout-report-table th, .workout-report-table td {
-            border: 2px solid #cbd5e0; /* Gray-400 for border */
-            padding: 8px 12px;
-            text-align: center;
-        }
-        .workout-report-table th {
-            background-color: #f1f5f9; /* Gray-200 for header background */
-            font-weight: 600;
-        }
-        .workout-report-table td {
-            background-color: #fff; /* White for cell background */
-        }
-    </style> -->
     <style type="text/tailwindcss">
         @layer utilities {
             html {
@@ -113,21 +94,21 @@
             <p class="text-[24px] italic font-light">Workout Report</p>
             <p class="text-[19px] font-bold text-center pl-[15px] italic">Date: {{ workout_session.date|date:"d/m/Y" }}</p>
             <table class="workout-report-table w-[630px] p-[15px] border-slate-400 border-[2px] text-center">
-                <tr class="border-[2px] bg-slate-200 border-slate-400">
+                <tr class="border-[2px] bg-slate-200 border-slate-400 font-semibold">
                     <th>Workout</th>
                     <th>Sets</th>
                     <th>Weights (kg)</th>
                     <th>Reps</th>
                 </tr>
                 {% for set_detail in set_details %}
-                <tr>
+                <tr class="font-medium">
                     <td>{{ set_detail.exercise.name }}</td>
                     <td>{{ set_detail.set_number }}</td>
                     <td>{% if set_detail.weight > 0 %}{{ set_detail.weight }}{% endif %}</td>
-                    <td class="border-b-[2px] border-b-slate-400">{% if set_detail.reps > 0 %}{{ set_detail.reps }}{% endif %}</td>
+                    <td>{% if set_detail.reps > 0 %}{{ set_detail.reps }}{% endif %}</td>
                 </tr>
                 {% empty %}
-                <tr>
+                <tr class="font-medium">
                     <td colspan="4" class="text-center">No workout details available.</td>
                 </tr>
                 {% endfor %}
